@@ -1,0 +1,7 @@
+{
+	"nome": "Bom prato",
+	"taxaFrete": -2,
+	"cozinha":{
+		"id": 2	
+	}
+}

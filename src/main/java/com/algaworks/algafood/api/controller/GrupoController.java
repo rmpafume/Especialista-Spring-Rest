@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
-import com.algaworks.algafood.api.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.api.model.GrupoModel;
-import com.algaworks.algafood.api.model.PermissaoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
 import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
@@ -41,9 +39,6 @@ public class GrupoController {
 	
 	@Autowired
 	private GrupoInputDisassembler grupoInputDisassembler;
-	
-	@Autowired
-	private PermissaoModelAssembler permissaoModelAssembler;
 	
 	@GetMapping
 	public List<GrupoModel> listar(){

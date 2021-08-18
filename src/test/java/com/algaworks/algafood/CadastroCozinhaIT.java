@@ -4,20 +4,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@TestPropertySource("/application-test.properties")
 public class CadastroCozinhaIT {
 	
 	@Autowired
@@ -37,22 +39,27 @@ public class CadastroCozinhaIT {
 		assertThat(novaCozinha.getId()).isNotNull();
 	}
 	
-	@Test(expected = ConstraintViolationException.class)
+	@Test
 	public void testarCadastroCozinhaSemNome() {
-		Cozinha novaCozinha = new Cozinha();
-		novaCozinha.setNome(null);
-		
-		novaCozinha = cadastroCozinha.salvar(novaCozinha);
+		Assertions.assertThrows(ConstraintViolationException.class,
+			() -> { 
+				Cozinha novaCozinha = new Cozinha();
+				novaCozinha.setNome(null);
+				novaCozinha = cadastroCozinha.salvar(novaCozinha);
+			}
+		);
 	}
 	
-	@Test(expected = EntidadeEmUsoException.class)
+	@Test
 	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
-		cadastroCozinha.excluir(1L);
+		Assertions.assertThrows(EntidadeEmUsoException.class, 
+			() -> cadastroCozinha.excluir(1L));
 	}
 	
-	@Test(expected = CozinhaNaoEncontradaException.class)
+	@Test
 	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
-		cadastroCozinha.excluir(100L);
+		Assertions.assertThrows(CozinhaNaoEncontradaException.class,
+			() -> cadastroCozinha.excluir(100L));
 	}
 	
 	
